@@ -13,8 +13,12 @@ CONFIG_DIR="/Users/david/.ipython"
 def connect():
     CONFIG=CONFIG_DIR+'/config.json';
 
-    with open(CONFIG) as f:
-        conf = json.load(f)
+    try:
+        with open(CONFIG) as f:
+            conf = json.load(f)
+
+    except IOError:
+        sys.exit( "could not open file " + CONFIG )
 
     engine = create_engine(URL(**conf))
 
@@ -24,8 +28,12 @@ def connect():
 def config():
     CONFIG=CONFIG_DIR+'/lms.json';
 
-    with open(CONFIG) as f:
-        conf = json.load(f)
+    try:
+        with open(CONFIG) as f:
+            conf = json.load(f)
+
+    except IOError:
+        sys.exit( "could not open file " + CONFIG )
 
     return conf
 
