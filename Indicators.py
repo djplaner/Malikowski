@@ -6,10 +6,11 @@ from sqlalchemy import create_engine
 import os
 import sys
 
+#-- update this to point to where you config.json and lms.json files are
 CONFIG_DIR="/Users/david/.ipython"
 
+#-- create database connection
 def connect():
-
     CONFIG=CONFIG_DIR+'/config.json';
 
     with open(CONFIG) as f:
@@ -19,7 +20,7 @@ def connect():
 
     return engine
 
-
+#-- grab site specific Moodle/database settings (e.g. mdl_prefix)
 def config():
     CONFIG=CONFIG_DIR+'/lms.json';
 

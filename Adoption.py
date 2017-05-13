@@ -1,3 +1,7 @@
+#
+# Adoption.py
+# - Calculates Malikowski categories for a given set of courses
+# - Uses very simple presence of features in course_module table NOT usage
 
 from Malikowski import Indicators
 import pandas as pd
