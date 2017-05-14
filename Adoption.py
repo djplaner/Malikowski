@@ -69,7 +69,10 @@ class Adoption:
 
     Attributes:
         df: raw data frame containing the adoption data for each course
-        malikowskiCourseDF: conversion into Malikowski
+        malikowski: data frame with rows for each course
+            multiindex course/shortname/fullname 
+            and fields for each category
+
         engine: data base "engine"
         configuration: local configuration file
         prefix: moodle/database prefix
@@ -136,6 +139,7 @@ class Adoption:
         #-- group all the course related data into a single row
         next = self.malikowskiGroup.pivot_table(
                     'x',['course','shortname','fullname'],'malikowski')
+        # remove the multi-index, add back in numeric index
         next.reset_index(drop=False,inplace=True)
         self.malikowski = next
 
