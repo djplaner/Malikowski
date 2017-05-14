@@ -17,4 +17,6 @@ Our current model is that this code is used in Jupyter Notebooks to perform anal
 
 (Both notebooks are missing content to maintain data privacy)
 
+## References
+
 Malikowski, S., Thompson, M., & Theis, J. (2007). A model for research into course management systems: bridging technology and learning theory. Journal of Educational Computing Research, 36(2), 149–173.

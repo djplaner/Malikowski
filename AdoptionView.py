@@ -46,7 +46,7 @@ class AdoptionView:
 
         #-- drop some columns
         df = self.model.malikowski.drop(
-                self.model.malikowski.columns[[0,2,8]],axis=1)
+                self.model.malikowski.columns[[0,2]],axis=1)
 
         #-- construct the bard
         trace1 = go.Bar( y=df.shortname, x=df.content,
@@ -61,8 +61,12 @@ class AdoptionView:
                         name='CBI', orientation ='h')
 
         data = [trace1, trace2, trace3, trace4, trace5]
+
+        height = len(df.index) * 50
+        if height < 600:
+            height = 600
         layout = go.Layout( barmode='stack', 
-                        height= len(df.index) * 30,
+                        height=height,
                         title="All courses",
                         margin = go.Margin( l=150, r=50, b=100, t=100, pad=4) )
 
