@@ -12,7 +12,7 @@ Our current model is that this code is used in Jupyter Notebooks to perform anal
 
 - [comparing strange courses](https://github.com/djplaner/Indicators/blob/master/OutputIndicators/Malikowski%20changes%20mapped%20against%20strange%20courses.ipynb)
 > Closer to the actual use.
-- [initial development(https://github.com/djplaner/Indicators/blob/master/OutputIndicators/Malikowski%20explorations.ipynb)
+- [initial development](https://github.com/djplaner/Indicators/blob/master/OutputIndicators/Malikowski%20explorations.ipynb)
 > Original development notebook.
 
 (Both notebooks are missing content to maintain data privacy)
