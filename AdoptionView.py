@@ -32,7 +32,40 @@ class AdoptionView:
                         name='CBI')
 
         data = [trace1, trace2, trace3, trace4, trace5]
-        layout = go.Layout( barmode='stack')
+        width = len(df.index) * 30
+        if width < 500:
+            width = 500
+        layout = go.Layout( barmode='stack', width=width)
 
         fig = go.Figure( data=data, layout=layout)
         iplot( fig)
+
+
+    def stackedBarHorizontal(self ):
+        """plot it"""
+
+        #-- drop some columns
+        df = self.model.malikowski.drop(
+                self.model.malikowski.columns[[0,2,8]],axis=1)
+
+        #-- construct the bard
+        trace1 = go.Bar( y=df.shortname, x=df.content,
+                         name='Content', orientation ='h')
+        trace2 = go.Bar( y= df.shortname, x= df.communication,
+                        name='Communication', orientation ='h')
+        trace3 = go.Bar( y= df.shortname, x= df.assessment,
+                        name='Assessment', orientation ='h')
+        trace4 = go.Bar( y= df.shortname, x= df.evaluation,
+                        name='Evaluation', orientation ='h')
+        trace5 = go.Bar( y= df.shortname, x= df.cbi,
+                        name='CBI', orientation ='h')
+
+        data = [trace1, trace2, trace3, trace4, trace5]
+        layout = go.Layout( barmode='stack', 
+                        height= len(df.index) * 30,
+                        title="All courses",
+                        margin = go.Margin( l=150, r=50, b=100, t=100, pad=4) )
+
+        fig = go.Figure( data=data, layout=layout)
+        iplot( fig)
+
