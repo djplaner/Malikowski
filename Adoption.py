@@ -16,6 +16,18 @@ where
 group by course,shortname,fullname,name order by course
 """
 
+#- SQL to get course details for all matching a given shortname using like
+
+shortnameQuery = """
+select 
+    course,shortname,fullname,name,count(cm.id) x 
+from 
+    {mdl_prefix}course_modules as cm,{mdl_prefix}modules as m,{mdl_prefix}course as c
+where 
+    shortname like '{shortname}' and module=m.id and c.id=course 
+group by course,shortname,fullname,name order by course
+"""
+
 # USQ mapping 2015
 
 mapping = { 'spider' : 'unknown',
@@ -105,17 +117,39 @@ class Adoption:
         self.addMalikowskiColumn()
         self.createMalikowski()
 
+    def getCoursesShortname(self, shortname ):
+        """Return Malikowski model array for courses specified by the provided
+           Moodle shortname"""
+        if shortname=='':
+            print ("No shortname specified")
+            return;
+
+        #-- create string list of course ids
+#        inCourses = ','.join(map(str,courses))
+        q = shortnameQuery.format( shortname=shortname, mdl_prefix=self.prefix )
+
+        #-- get the data
+        self.df = pd.read_sql(q,self.engine)
+
+        #-- post process with malikowski stuff
+        self.addMalikowskiColumn()
+        self.createMalikowski()
+
 
     def addMalikowskiColumn(self):
         """add the column for malikowski translation to the df"""
         malikowskis = []
         for index, row in self.df.iterrows():
-            malikowskis.append(mapping[row['name']]);
+            malikowskis.append(mapping[row['name']])
+
         self.df['malikowski'] = malikowskis;
 
     def createMalikowski(self):
         """create data frame row = course, columns is total counts for 
         Malikowski categories, including counts and percentages""" 
+        #-- remove the unknown rows
+        self.df = self.df[ self.df.malikowski != 'unknown']
+
         #-- group all the malikowski categories together
         self.malikowskiGroup = self.df.groupby( 
            ['course','shortname','fullname','malikowski']).sum().reset_index()
