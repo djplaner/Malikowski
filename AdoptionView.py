@@ -42,7 +42,7 @@ class AdoptionView:
 
 
     def stackedBarHorizontal(self ):
-        """plot it"""
+        """plot horizontally a stacked bar chart - 1 bar per course"""
 
         #-- drop some columns
         df = self.model.malikowski.drop(
@@ -73,3 +73,28 @@ class AdoptionView:
         fig = go.Figure( data=data, layout=layout)
         iplot( fig)
 
+    def boxPlotComparison(self, title):
+        """Show a box plot comparison for each Malikowski category for
+        all the courses in the current model"""
+
+        model = self.model
+        numCourses = len(model.malikowski.index)
+        title += ' (n=' + str(numCourses) + ')'
+
+        #-- set up each of the bars - 1 per Malikowski category
+        content = go.Box( y=model.malikowski.content, name='Content',
+                            boxpoints='all',boxmean='sd')
+        communication = go.Box( y=model.malikowski.communication,   
+                                name='Communication', boxpoints='all')
+        assessment = go.Box( y=model.malikowski.assessment, 
+                            name='Assessment',boxpoints='all')
+        evaluation = go.Box( y=model.malikowski.evaluation, name='Evaluation',
+                            boxpoints='all')
+        cbi = go.Box( y=model.malikowski.cbi, name='cbi',boxpoints='all')
+
+        layout = go.Layout( title=title)
+
+        data = [ content, communication, assessment, evaluation, cbi]
+        fig = go.Figure( data=data, layout=layout)
+        iplot(fig)
+    

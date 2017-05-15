@@ -93,7 +93,9 @@ class Adoption:
     allCategories=['content','communication','assessment','evaluation','cbi']
    
     def __init__(self):
-        self.df = "hello"
+        self.df = None
+        self.malikowski = None
+
         self.engine = Indicators.connect()
         self.configuration = Indicators.config()
 
