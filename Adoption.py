@@ -119,6 +119,7 @@ class Adoption:
         #-- post process with malikowski stuff
         self.addMalikowskiColumn()
         self.createMalikowski()
+        self.addPercentageAdoption()
 
     def getCoursesShortname(self, shortname ):
         """Return Malikowski model array for courses specified by the provided
@@ -137,6 +138,7 @@ class Adoption:
         #-- post process with malikowski stuff
         self.addMalikowskiColumn()
         self.createMalikowski()
+        self.addPercentageAdoption()
 
 
     def addMalikowskiColumn(self):
@@ -221,6 +223,25 @@ class Adoption:
         group.reset_index(drop=True,inplace=True)
         return group
  
+    def addPercentageAdoption(self):
+        """Create data member percentages as a dict. Key is category name.
+        Value is % of courses in this object that have adopted something
+        in that category"""
+
+        # TODO: Might be useful to define what the bottom limit is
+        #       - i.e. rather than 0 = adoption.  Maybe 5.  But that might
+        #         make sense to be done via category
+
+        self.percentages = {}
+        numCourses = len(self.malikowski.index)
+        if numCourses == 0:
+            return
+        percent = 100 / numCourses;
+
+        for category in self.allCategories:
+            adopted = self.malikowski.loc[self.malikowski[category] > 0]
+            numAdopted = len(adopted.index)
+            self.percentages[category] = numAdopted * percent
 
 
         
