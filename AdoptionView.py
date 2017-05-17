@@ -145,6 +145,8 @@ class AdoptionView:
         allCategories = groups[0].allCategories;
 
         for category in allCategories:
+            if showCategories is not None and not category in showCategories:
+                continue
             x = []
             y = []
             mMin = []
