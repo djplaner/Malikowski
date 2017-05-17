@@ -5,6 +5,7 @@
 import plotly
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import plotly.graph_objs as go
+from plotly.graph_objs import *
 
 class AdoptionView:
     """Take a Adoption object and generate a plot"""
@@ -134,3 +135,39 @@ class AdoptionView:
             layout = go.Layout( title=category)
             fig = go.Figure( data=data, layout=layout)
             iplot(fig)
+
+    def listCategoryPercentage( self, groups, showCategories=None):
+        """create one graph per category and show the percentage adoption 
+        for each group of courses. But only for categories in showCategories"""
+
+        #-- TODO: check to make sure the list isn't empty
+
+        allCategories = groups[0].allCategories;
+
+        for category in allCategories:
+            x = []
+            y = []
+            mMin = []
+            mMax = []
+    
+            malikowskiMin = {'content':50, 'communication':20, 'assessment':20, 'evaluation':0, 'cbi':0}
+            malikowskiMax = {'content':100, 'communication':50, 'assessment':50, 'evaluation':20, 'cbi':10}
+            for group in groups:
+                x.append(group.title)
+                y.append(group.percentages[category])
+                mMin.append(malikowskiMin[category])
+                mMax.append(malikowskiMax[category])
+
+            bar = go.Bar( y=y, x=x, opacity=0.8,name="% course adoption" )
+            trace1 = go.Scatter(x=x,y=mMin, name="Malikowski min. %",
+                                        mode="lines")
+            trace2 = go.Scatter(x=x,y=mMax, name="Malikowski max. %",
+                                    mode="lines")
+            data = [bar,trace1,trace2]
+
+    
+            layout = go.Layout( title=category,yaxis=YAxis( title="% courses", 
+                                range=[0,100]), xaxis=XAxis( title="Terms"))
+            fig = go.Figure( data=data, layout=layout)
+            iplot(fig)
+
