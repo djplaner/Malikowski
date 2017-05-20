@@ -27,6 +27,7 @@ where
     shortname like '{shortname}' and module=m.id and c.id=course 
 group by course,shortname,fullname,name order by course
 """
+
 class Adoption:
     """Generate original Malikowski model using simple presence/adoption of 
     features. Do so for a list of courses specific either by list of ids/period
@@ -49,6 +50,9 @@ class Adoption:
         self.title = title
         self.malikowski = None
 
+        self.query = query
+        self.shortnameQuery = shortnameQuery
+
         #-- site specific stuff
         # - database engine
         self.engine = Indicators.connect()
@@ -67,7 +71,7 @@ class Adoption:
 
         #-- create string list of course ids
         inCourses = ','.join(map(str,courses))
-        q = query.format( courses=inCourses, mdl_prefix=self.prefix )
+        q = self.query.format( courses=inCourses, mdl_prefix=self.prefix )
 
         #-- get the data
         self.df = pd.read_sql(q,self.engine)
@@ -86,7 +90,7 @@ class Adoption:
 
         #-- create string list of course ids
 #        inCourses = ','.join(map(str,courses))
-        q = shortnameQuery.format( shortname=shortname, mdl_prefix=self.prefix )
+        q = self.shortnameQuery.format( shortname=shortname, mdl_prefix=self.prefix )
 
         #-- get the data
         self.df = pd.read_sql(q,self.engine)
