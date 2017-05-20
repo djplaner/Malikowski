@@ -24,14 +24,16 @@ The configuration for the Moodle database connection.
 
 **Example**
 
-```{
+```json
+{
   "drivername": "postgresql",
   "database": "moodle_dbase",
   "username": "postgres",
   "host": "localhost",
   "port": "5432",
   "password": "SomePassword"
-}```
+}
+```
 
 ### lms.json
 
@@ -39,7 +41,8 @@ Meant to configure various LMS specific information
 
 **Example**
 
-```{  
+```json
+{  
     "mdl_prefix" : "moodle.mdl_",
     "adoptionMapping" : {
             "spider" : "unknown", "smarthinking" : "communication",
@@ -49,7 +52,8 @@ Meant to configure various LMS specific information
     "usageMapping" : { "mod_survey" : "evaluation", "mod_folder" : "content",
             "mod_forum" : "communication", "mod_quiz" : "assessment",
             "mod_book" : "content", "mod_scorm" : "content",
-}```
+}
+```
 
 - `mdl_prefix` - specifies the prefix for your Moodle database table names
 - `adoptionMapping` - maps Moodle course module names to Malikowski categories
