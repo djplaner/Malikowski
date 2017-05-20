@@ -37,6 +37,5 @@ def config():
 
     return conf
 
-
 if __name__ == '__main__':
     connect()

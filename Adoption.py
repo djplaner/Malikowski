@@ -27,54 +27,6 @@ where
     shortname like '{shortname}' and module=m.id and c.id=course 
 group by course,shortname,fullname,name order by course
 """
-
-# USQ mapping 2015
-
-mapping = { 'spider' : 'unknown',
-'smarthinking' : 'communication',
-'usqvideo' : 'content',
-'turnitintooltwo' : 'assessment',
-'lightboxgallery' : 'content',
-'voiceauthoring': 'content',
-'voiceboard' : 'communication',
-'voiceemail' : 'communication',
-'voicepodcaster': 'content',
-'voicepresentation': 'content',
-'engagement' : 'evaluation', #-- analytics - revaling about students
-'book': 'content',
-'choice' : 'evaluation',
-'data' : 'content', #--questionable could be communication??
-'elluminate' : 'communication',
-'usqnavicons': 'content',
-'equella': 'content',
-'feedback' : 'evaluation',
-'folder': 'content',
-'glossary': 'content',
-'imscp' : 'content',
-'label' : 'content',
-'lesson' : 'cbi',
-'lti' : 'unknown', #-- could be anything, depending on what is pointed to
-'page': 'content',
-'resource': 'content',
-'survey' : 'evaluation',
-'url': 'content',
-'wiki' : 'communication', #-- questionable
-'scorm': 'content',
-'dialogue' : 'communication',
-'forum' : 'communication',
-'voicetools' : 'content',
-'assignment' : 'assessment',
-'liveclassroom' : 'communication',
-'usqease' : 'assessment',  #-- questionable - also gradebook
-'usqgetstarted' : 'content',
-'chat' : 'communication',
-'assign': 'assessment', #-- questionable - also grades
-'quiz': 'assessment',
-'workshop' : 'assessment',
-'bim' : 'communication', #-- questionable
-};
-
-
 class Adoption:
     """Generate original Malikowski model using simple presence/adoption of 
     features. Do so for a list of courses specific either by list of ids/period
@@ -97,10 +49,14 @@ class Adoption:
         self.title = title
         self.malikowski = None
 
+        #-- site specific stuff
+        # - database engine
         self.engine = Indicators.connect()
-        self.configuration = Indicators.config()
 
+        # - configuration
+        self.configuration = Indicators.config()
         self.prefix = self.configuration['mdl_prefix']  
+        self.mapping = self.configuration['adoptionMapping']
 
     def getCourses(self, courses ):
         """Return Malikowski model array for each course. Use simple adoption
@@ -145,7 +101,7 @@ class Adoption:
         """add the column for malikowski translation to the df"""
         malikowskis = []
         for index, row in self.df.iterrows():
-            malikowskis.append(mapping[row['name']])
+            malikowskis.append(self.mapping[row['name']])
 
         self.df['malikowski'] = malikowskis;
 

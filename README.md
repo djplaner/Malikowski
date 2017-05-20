@@ -6,6 +6,52 @@ The idea is to be able to use the Malikowski model to get an indication of what 
 
 Initially, this code will be designed to work with the Moodle LMS across different institutions. It will be tested across two institutions.
 
+## Pre-requisites
+
+- Python with misc. modules (e.g. database)
+- Moodle database
+> Currently this is only working with Moodle. Assumes you have a connection to it.
+
+You might also like to use the Jupyter notebooks in [the Indicators repository](https://github.com/djplaner/Indicators), especially those in the OutputIndicators folder, which are use the Malikowski code.
+
+## Configuration
+
+You will also need to create two JSON configuration files in a folder outside of the Malikowski project.
+
+### config.json
+
+The configuration for the Moodle database connection. 
+
+**Example**
+
+`{
+  "drivername": "postgresql",
+  "database": "Study Desk 2015",
+  "username": "postgres",
+  "host": "localhost",
+  "port": "5432",
+  "password": "SomePassword"
+}`
+
+### lms.json
+
+Meant to configure various LMS specific information
+
+**Example**
+
+`{  
+    "mdl_prefix" : "moodle.mdl_",
+    "adoptionMapping" : {
+            "spider" : "unknown", "smarthinking" : "communication",
+            "usqvideo" : "content", "turnitintooltwo" : "assessment",
+            "lightboxgallery" : "content", "voiceauthoring": "content" 
+     }
+}`
+
+- `mdl_prefix` - specifies the prefix for your Moodle database table names
+- `adoptionMapping` - maps Moodle course module names to Malikowski categories
+> This will be slightly different for each Moodle install, depending on the Modules installed. We're happy to share an initial rough mapping.
+
 ## Examples
 
 Our current model is that this code is used in Jupyter Notebooks to perform analysis. Some examples are available via [another repository](https://github.com/djplaner/Indicators), including
