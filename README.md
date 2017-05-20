@@ -24,14 +24,14 @@ The configuration for the Moodle database connection.
 
 **Example**
 
-`{
+```{
   "drivername": "postgresql",
-  "database": "Study Desk 2015",
+  "database": "moodle_dbase",
   "username": "postgres",
   "host": "localhost",
   "port": "5432",
   "password": "SomePassword"
-}`
+}```
 
 ### lms.json
 
@@ -39,18 +39,22 @@ Meant to configure various LMS specific information
 
 **Example**
 
-`{  
+```{  
     "mdl_prefix" : "moodle.mdl_",
     "adoptionMapping" : {
             "spider" : "unknown", "smarthinking" : "communication",
             "usqvideo" : "content", "turnitintooltwo" : "assessment",
             "lightboxgallery" : "content", "voiceauthoring": "content" 
-     }
-}`
+     },
+    "usageMapping" : { "mod_survey" : "evaluation", "mod_folder" : "content",
+            "mod_forum" : "communication", "mod_quiz" : "assessment",
+            "mod_book" : "content", "mod_scorm" : "content",
+}```
 
 - `mdl_prefix` - specifies the prefix for your Moodle database table names
 - `adoptionMapping` - maps Moodle course module names to Malikowski categories
 > This will be slightly different for each Moodle install, depending on the Modules installed. We're happy to share an initial rough mapping.
+- `usageMapping` - matched `component` field from `logstore_standard_log` table to Malikowski categories
 
 ## Examples
 
