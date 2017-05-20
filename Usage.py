@@ -17,7 +17,7 @@ where
         select userid from moodle.mdl_role_assignments where roleid = '5' 
             and contextid in (
                 select id from moodle.mdl_context where contextlevel='50' 
-                    and instanceid = '6082' ))
+                    and instanceid = courseid ))
 group by l.courseid,shortname,fullname,component
 """
 
@@ -33,7 +33,7 @@ where
         select userid from {mdl_prefix}role_assignments where roleid = '5' 
             and contextid in (
             select id from {mdl_prefix}context where contextlevel='50' 
-                and instanceid = '6082' ))
+                and instanceid = courseid ))
 group by l.courseid,shortname,fullname,component
 """
 
