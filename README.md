@@ -14,6 +14,12 @@ Initially, this code will be designed to work with the Moodle LMS across differe
 
 You might also like to use the Jupyter notebooks in [the Indicators repository](https://github.com/djplaner/Indicators), especially those in the OutputIndicators folder, which are use the Malikowski code.
 
+### MAV requirement
+
+**Note:** Currently the *Usage* class requires the use a database table produced by the [MAV project](https://github.com/damoclark/mav-enterprise). Not something a lot of people will have ATM
+
+In addition, the assumption is that the MAV table is part of the same database as Moodle.
+
 ## Configuration
 
 You will also need to create two JSON configuration files in a folder outside of the Malikowski project.

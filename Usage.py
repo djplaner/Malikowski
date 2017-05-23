@@ -9,34 +9,27 @@ import pandas as pd
 
 query = """
 select 
-    l.courseid as course,shortname,fullname,component as name,count(l.id) as x
+  courseid as course,shortname,fullname,component as name,sum(clicks) as x
 from 
-    {mdl_prefix}logstore_standard_log as l, {mdl_prefix}course as c
-where 
-    courseid in ( {courses} ) and c.id=courseid and userid in (
-        select userid from moodle.mdl_role_assignments where roleid = '5' 
-            and contextid in (
-                select id from moodle.mdl_context where contextlevel='50' 
-                    and instanceid = courseid ))
-group by l.courseid,shortname,fullname,component
+  {mav_prefix}logstore_standard_log, {mdl_prefix}course as c
+where
+  courseid in ( {courses}) and c.id=courseid
+group by 
+  course,shortname,fullname,component
 """
 
 #- SQL to get course details for all matching a given shortname using like
 
 shortnameQuery = """
 select 
-    l.courseid as course,shortname,fullname,component as name,count(l.id) as x
+  courseid as course,shortname,fullname,component as name,sum(clicks) as x
 from 
-    {mdl_prefix}logstore_standard_log as l, {mdl_prefix}course as c
-where 
-    shortname like '{shortname}' and c.id=courseid and userid in (
-        select userid from {mdl_prefix}role_assignments where roleid = '5' 
-            and contextid in (
-            select id from {mdl_prefix}context where contextlevel='50' 
-                and instanceid = courseid ))
-group by l.courseid,shortname,fullname,component
+  {mav_prefix}logstore_standard_log, {mdl_prefix}course as c
+where
+  shortname like '{shortname}' and c.id=courseid
+group by 
+  course,shortname,fullname,component
 """
-
 
 class Usage(Adoption):
     """Generate original Malikowski model by counting student clicks
@@ -60,7 +53,7 @@ class Usage(Adoption):
 
         self.query = query
         self.shortnameQuery = shortnameQuery
-        self.mapping = self.configuration['usageMapping']
+        self.mapping = self.configuration['usageMappingMAV']
 
 
 

@@ -59,7 +59,8 @@ class Adoption:
 
         # - configuration
         self.configuration = Indicators.config()
-        self.prefix = self.configuration['mdl_prefix']  
+        self.mdl_prefix = self.configuration['mdl_prefix']  
+        self.mav_prefix = self.configuration['mav_prefix']  
         self.mapping = self.configuration['adoptionMapping']
 
     def getCourses(self, courses ):
@@ -71,7 +72,8 @@ class Adoption:
 
         #-- create string list of course ids
         inCourses = ','.join(map(str,courses))
-        q = self.query.format( courses=inCourses, mdl_prefix=self.prefix )
+        q = self.query.format( courses=inCourses, mdl_prefix=self.mdl_prefix,
+                               mav_prefix=self.mav_prefix )
 
         #-- get the data
         self.df = pd.read_sql(q,self.engine)
@@ -90,7 +92,9 @@ class Adoption:
 
         #-- create string list of course ids
 #        inCourses = ','.join(map(str,courses))
-        q = self.shortnameQuery.format( shortname=shortname, mdl_prefix=self.prefix )
+        q = self.shortnameQuery.format( shortname=shortname, 
+                                    mdl_prefix=self.mdl_prefix, 
+                                    mav_prefix=self.mav_prefix )
 
         #-- get the data
         self.df = pd.read_sql(q,self.engine)
