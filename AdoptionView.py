@@ -128,7 +128,8 @@ class AdoptionView:
                 temp = group.malikowski
                 #-- get the slice of the dataframe by the variable name category
                 y = getattr( temp, category)
-                box = go.Box( y=y, name=group.title, boxpoints='all')
+                title = group.title.replace( " ", "_" )
+                box = go.Box( y=y, name=title, boxpoints='all')
                 data.append(box)
 
             #-- draw the graph for the category

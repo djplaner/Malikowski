@@ -5,6 +5,7 @@
 
 from Malikowski import Indicators
 import pandas as pd
+import names
 
 query = """
 select 
@@ -206,6 +207,18 @@ class Adoption:
             adopted = self.malikowski.loc[self.malikowski[category] > 0]
             numAdopted = len(adopted.index)
             self.percentages[category] = numAdopted * percent
+
+
+    def anonymiseCourseNames(self):
+        """Replace all the shortname and fullname for courses into anonymous
+        names"""
+
+        for index, row in self.malikowski.iterrows():
+            name = names.get_first_name()
+            fullName = name + " " + names.get_last_name()
+            self.malikowski.loc[index, "shortname"] = name
+            self.malikowski.loc[index, "fullname"] = fullName
+
 
 
         
