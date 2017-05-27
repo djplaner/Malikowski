@@ -54,7 +54,17 @@ class Usage(Adoption):
         self.query = query
         self.shortnameQuery = shortnameQuery
         self.mapping = self.configuration['usageMappingMAV']
-
-
-
         
+    def clicksPerStudent(self):
+        """ Modify the raw number of clicks to clicks per enrolled student"""
+        for index,row in self.malikowski.iterrows():
+            course = row['course']
+            # get the matching TOTAL number of students from self.students
+            total = self.students['TOTAL'].loc[
+                        self.students['course'] == course].values[0]
+            # for each of the malikowski categories, 
+            # divide the count by the total number of students
+            for category in self.allCategories:
+                raw = self.malikowski.loc[index, category]
+                self.malikowski.loc[index, category] = raw / total;
+

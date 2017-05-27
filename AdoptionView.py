@@ -12,14 +12,21 @@ class AdoptionView:
    
     def __init__(self,adoption=None):
         self.model = adoption
+    
+        self.studentsAdded = False
 
     def stackedBar(self ):
         """plot it"""
+
+        # add (n=??) if we have students
+        if not self.studentsAdded and self.model.students is not None:
+            self.addTotalStudents()
 
         ## TODO: return if model is NONE
         #-- drop some columns
         df = self.model.malikowski.drop(
                 self.model.malikowski.columns[[0,2]],axis=1)
+
 
         #-- construct the bard
         trace1 = go.Bar( x=df.shortname, y=df.content, 
@@ -45,6 +52,10 @@ class AdoptionView:
 
     def stackedBarHorizontal(self ):
         """plot horizontally a stacked bar chart - 1 bar per course"""
+
+        # add (n=??) if we have students
+        if not self.studentsAdded and self.model.students is not None:
+            self.addTotalStudents()
 
         #-- drop some columns
         df = self.model.malikowski.drop(
@@ -173,4 +184,17 @@ class AdoptionView:
                                 range=[0,100]), xaxis=XAxis( title="Terms"))
             fig = go.Figure( data=data, layout=layout)
             iplot(fig)
+
+    def addTotalStudents(self):
+        self.studentsAdded = True
+        for index,row in self.model.malikowski.iterrows():
+            # get the course
+            course = row['course']
+            shortname = row['shortname']
+            # find TOTAL in students matching course
+            total = self.model.students['TOTAL'].loc[ 
+                        self.model.students['course'] == course].values[0]
+
+            newName = "{name}\n (n={n:.0f})".format(name=shortname,n=total)
+            self.model.malikowski.loc[index,'shortname'] = newName
 

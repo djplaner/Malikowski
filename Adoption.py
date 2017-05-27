@@ -4,6 +4,11 @@
 # - Uses very simple presence of features in course_module table NOT usage
 
 from Malikowski import Indicators
+from Malikowski.StudentsInCourses import StudentsInCourses
+
+#from Malikowski.Mapping.Factory import Factory
+
+
 import pandas as pd
 import names
 
@@ -46,10 +51,11 @@ class Adoption:
 
     allCategories=['content','communication','assessment','evaluation','cbi']
    
-    def __init__(self, title=''):
+    def __init__(self, title='', mappingType = 'moodle'):
         self.df = None
         self.title = title
         self.malikowski = None
+        self.students = None
 
         self.query = query
         self.shortnameQuery = shortnameQuery
@@ -63,6 +69,9 @@ class Adoption:
         self.mdl_prefix = self.configuration['mdl_prefix']  
         self.mav_prefix = self.configuration['mav_prefix']  
         self.mapping = self.configuration['adoptionMapping']
+#        self.mapping = Factory.create( mappingType, 
+#                        self.configuration['adoptionMapping'] )
+        #print( self.mapping )
 
     def getCourses(self, courses ):
         """Return Malikowski model array for each course. Use simple adoption
@@ -70,6 +79,8 @@ class Adoption:
         if not courses:
             print ("No courses specified")
             return;
+
+        self.courses = courses;
 
         #-- create string list of course ids
         inCourses = ','.join(map(str,courses))
@@ -105,12 +116,16 @@ class Adoption:
         self.createMalikowski()
         self.addPercentageAdoption()
 
+        #-- add list of course ids
+        self.courses = self.malikowski['course'].tolist()
+
 
     def addMalikowskiColumn(self):
         """add the column for malikowski translation to the df"""
         malikowskis = []
         for index, row in self.df.iterrows():
             malikowskis.append(self.mapping[row['name']])
+#            malikowskis.append(self.mapping.mapFeature( row['name'] ))
 
         self.df['malikowski'] = malikowskis;
 
@@ -219,6 +234,16 @@ class Adoption:
             self.malikowski.loc[index, "shortname"] = name
             self.malikowski.loc[index, "fullname"] = fullName
 
+
+    def addStudents(self):
+        """Add students data member that is a data frame with
+           course - course id
+           TOTAL - total enrolments in course
+           All other columns - number of students in groups"""
+
+        self.Studs = StudentsInCourses( self.courses )
+        self.Studs.getData()
+        self.students = self.Studs.Studs
 
 
         
