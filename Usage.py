@@ -60,11 +60,17 @@ class Usage(Adoption):
         for index,row in self.malikowski.iterrows():
             course = row['course']
             # get the matching TOTAL number of students from self.students
-            total = self.students['TOTAL'].loc[
+            # - total is 0 if no students
+            total=0
+            if ( self.students['course'] == course ).any():
+                total = self.students['TOTAL'].loc[
                         self.students['course'] == course].values[0]
+
             # for each of the malikowski categories, 
             # divide the count by the total number of students
             for category in self.allCategories:
                 raw = self.malikowski.loc[index, category]
-                self.malikowski.loc[index, category] = raw / total;
+                self.malikowski.loc[index, category] = 0
+                if total != 0: 
+                    self.malikowski.loc[index, category] = raw / total;
 

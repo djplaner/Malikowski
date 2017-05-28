@@ -7,15 +7,9 @@ from Malikowski import Indicators
 
 import pandas as pd
 
+##-- old specific SQL query 
 query = """
-select 
-    courseid,name,count(userid)
-from 
-    {mdl_prefix}groups as groups,{mdl_prefix}groups_members as members
-where 
-    groups.id=groupid and courseid in ( {courses} ) and 
-    ( name like 'On-Campus%' or name like 'Online%' )
-group by courseid,name
+select courseid as course,name,count(userid) from {mdl_prefix}groups as groups,{mdl_prefix}groups_members as members where groups.id=groupid and courseid in ( {courses} ) and ( name like 'On-Campus - Fraser Coast' or name like 'On-Campus - Springfield' or name like 'On-Campus - Toowoomba' or name like 'Online' ) group by courseid,name
 """
 
 class StudentsInCourses:
@@ -45,6 +39,7 @@ class StudentsInCourses:
 
         #-- create string list of course ids
         inCourses = ','.join(map(str,self.courses))
+
         q = self.query.format( courses=inCourses, mdl_prefix=self.mdl_prefix,
                                mav_prefix=self.mav_prefix )
 
@@ -60,9 +55,10 @@ class StudentsInCourses:
         different student types, including TOTAL"""
 
         # turn separate rows into a single based on course
-        tmp = self.df.pivot_table( 'count',['course'],'name')
-        tmp.reset_index( drop=False,inplace=True)
+#        tmp = self.df.pivot_table( 'count',['course'],'name')
+#        tmp.reset_index( drop=False,inplace=True)
 
+        tmp = self.df
         tmp = tmp.fillna(0)
         # calculate the total number of students
         col_list = list(tmp)
