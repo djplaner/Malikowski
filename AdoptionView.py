@@ -13,7 +13,9 @@ class AdoptionView:
     def __init__(self,adoption=None):
         self.model = adoption
     
+        #-- booleans used to indicate if (n=) has been added to title
         self.studentsAdded = False
+        self.coursesAdded = False
 
     def stackedBar(self ):
         """plot it"""
@@ -135,14 +137,19 @@ class AdoptionView:
             data = []
             #-- generate the Box for each group of courses
             for group in groups:
+                if not self.coursesAdded:
+                    numCourses = len(group.malikowski.index)
+                    group.title += " (n=" + str(numCourses) + ")"
+
                 #-- tmp pointer to malikoski data frame
                 temp = group.malikowski
                 #-- get the slice of the dataframe by the variable name category
                 y = getattr( temp, category)
-                title = group.title.replace( " ", "_" )
+                title = group.title # group.title.replace( " ", "_" )
                 box = go.Box( y=y, name=title, boxpoints='all')
                 data.append(box)
 
+            self.coursesAdded = True
             #-- draw the graph for the category
             layout = go.Layout( title=category)
             fig = go.Figure( data=data, layout=layout)
@@ -167,10 +174,16 @@ class AdoptionView:
             malikowskiMin = {'content':50, 'communication':20, 'assessment':20, 'evaluation':0, 'cbi':0}
             malikowskiMax = {'content':100, 'communication':50, 'assessment':50, 'evaluation':20, 'cbi':10}
             for group in groups:
+                if not self.coursesAdded:
+                    numCourses = len(group.malikowski.index)
+                    group.title += " (n=" + str(numCourses) + ")"
+
                 x.append(group.title)
                 y.append(group.percentages[category])
                 mMin.append(malikowskiMin[category])
                 mMax.append(malikowskiMax[category])
+
+            self.coursesAdded = True
 
             bar = go.Bar( y=y, x=x, opacity=0.8,name="% course adoption" )
             trace1 = go.Scatter(x=x,y=mMin, name="Malikowski min. %",
