@@ -9,7 +9,16 @@ import pandas as pd
 
 ##-- old specific SQL query 
 query = """
-select courseid as course,name,count(userid) from {mdl_prefix}groups as groups,{mdl_prefix}groups_members as members where groups.id=groupid and courseid in ( {courses} ) and ( name like 'On-Campus - Fraser Coast' or name like 'On-Campus - Springfield' or name like 'On-Campus - Toowoomba' or name like 'Online' ) group by courseid,name
+SELECT 
+  course.id as course,count(course.id) AS TOTAL 
+FROM 
+  {mdl_prefix}role_assignments AS asg 
+        JOIN {mdl_prefix}context AS context ON asg.contextid = context.id AND context.contextlevel = 50 
+        JOIN {mdl_prefix}user AS u ON u.id = asg.userid 
+        JOIN {mdl_prefix}course AS course ON context.instanceid = course.id 
+WHERE 
+    asg.roleid = 5 AND course.id in ( {courses} ) 
+GROUP BY course.id ORDER BY COUNT(course.id) DESC
 """
 
 class StudentsInCourses:
@@ -31,7 +40,8 @@ class StudentsInCourses:
         self.mdl_prefix = self.configuration['mdl_prefix']  
         self.mav_prefix = self.configuration['mav_prefix']  
         self.mapping = self.configuration['adoptionMapping']
-        self.query = self.configuration['StudentsInCourses']
+#        self.query = self.configuration['StudentsInCourses']
+        self.query = query
 
 
     def getData(self ):
